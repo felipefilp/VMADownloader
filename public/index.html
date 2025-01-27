@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>VMADownloader</title>
+        <link rel="stylesheet" href="/style.css" />
+    </head>
+    <body>
+        <h1>VMADownloader - Baixador de vídeos do Youtube</h1>
+        <form id="download-form">
+            <input type="text" id="url" placeholder="Enter YouTube URL"
+                required />
+            <button type="submit">Baixar</button>
+        </form>
+        <script>
+    document.getElementById('download-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const url = document.getElementById('url').value;
+      window.location.href = `/download?url=${encodeURIComponent(url)}`;
+    });
+  </script>
+    </body>
+</html>
