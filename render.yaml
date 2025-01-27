@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: nestjs-ytdl
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    region: oregon
+    plan: free
