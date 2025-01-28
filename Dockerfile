@@ -1,10 +1,14 @@
 # Use a imagem mais recente do Node.js
-FROM node:latest
+FROM node:20
 
-# Atualizar pacotes e instalar dependências para yt-dlp
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y python3-pip ffmpeg && \
-    pip3 install -U yt-dlp
+# Atualizar pacotes
+RUN apt-get update && apt-get install -y python3-pip
+
+# Instalar yt-dlp
+RUN pip3 install -U yt-dlp
+
+# Instalar o ffmpeg
+RUN apt-get install -y ffmpeg
 
 # Diretório de trabalho no contêiner
 WORKDIR /app
