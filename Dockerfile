@@ -1,7 +1,7 @@
-# Use a imagem oficial do Node.js
-FROM node:16
+# Use a imagem mais recente do Node.js
+FROM node:latest
 
-# Instalar o yt-dlp (e outras dependências necessárias)
+# Instalar dependências para yt-dlp
 RUN apt-get update && apt-get install -y python3-pip ffmpeg && \
     pip3 install -U yt-dlp
 
@@ -13,6 +13,9 @@ COPY . .
 
 # Instalar dependências do Node.js
 RUN npm install
+
+# Rodar o build do NestJS
+RUN npm run build
 
 # Expor a porta que o app irá rodar
 EXPOSE 3000
