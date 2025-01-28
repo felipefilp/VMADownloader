@@ -1,23 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { url } from 'inspector';
-import * as ytdl from '@distube/ytdl-core'
+import { exec } from 'child_process';
+import { Observable } from 'rxjs';
+import * as stream from 'stream';
 
 @Injectable()
 export class DownloadService {
-        downloadVideo(url: string){
-            if(!ytdl.validateURL(url)){
-                throw new Error("URL inválida!")
-            }
-            return ytdl(url, {
-                quality: 'highest',
-                requestOptions: {
-                    headers: {
-                      'User-Agent':
-                        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                      'Accept-Language': 'en-US,en;q=0.9',
-                      'Accept-Encoding': 'gzip, deflate, br',
-                    },
-            }}
-        )
-    }
+  downloadVideo(videoUrl: string): Observable<stream.Readable> {
+    return new Observable((observer) => {
+      const command = `yt-dlp -o - "${videoUrl}"`; // -o - significa que a saída será o vídeo em formato binário
+
+      const child = exec(command, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Erro ao baixar o vídeo: ${stderr}`);
+          observer.error(`Erro ao baixar o vídeo: ${stderr}`);
+          return;
+        }
+        
+        observer.complete();
+      });
+
+      if (child.stdout) {
+        observer.next(child.stdout); // Retorna o stream
+      } else {
+        observer.error('Erro ao obter o stream de vídeo');
+      }
+    });
+  }
 }
